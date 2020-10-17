@@ -16,9 +16,12 @@ public class BaseScreen<T extends Container> extends ContainerScreen<T> {
 
    private final ResourceLocation GUI_TEXTURE;
 
-   public BaseScreen(T container, ResourceLocation gui_texture, PlayerInventory playerInventory, ITextComponent title) {
+   public BaseScreen(T container, ResourceLocation gui_texture, PlayerInventory playerInventory, ITextComponent title, int xSize, int ySize) {
       super(container, playerInventory, title);
       this.GUI_TEXTURE = gui_texture;
+      this.xSize = xSize;
+      this.ySize = ySize;
+      this.playerInventoryTitleY = this.ySize - 94;
    }
 
    @Override
