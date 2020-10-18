@@ -6,8 +6,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod("withoutalib")
+@Mod(WithoutALib.MODID)
 public class WithoutALib {
+
+	public static final String MODID = "withoutalib";
 
 	public WithoutALib() {
 		// Register the setup method for modloading
