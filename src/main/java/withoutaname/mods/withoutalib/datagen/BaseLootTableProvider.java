@@ -7,10 +7,10 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
 import net.minecraft.data.LootTableProvider;
-import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.SurvivesExplosion;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.*;
+import net.minecraft.world.storage.loot.conditions.SurvivesExplosion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -79,7 +79,7 @@ public abstract class BaseLootTableProvider extends LootTableProvider {
 
 	@Override
 	public String getName() {
-		return "WithoutAPresent LootTables";
+		return "LootTables";
 	}
 
 }
