@@ -79,7 +79,7 @@ public abstract class BaseLootTableProvider extends LootTableProvider {
 
 	@Override
 	public String getName() {
-		return "WithoutAPresent LootTables";
+		return "LootTables";
 	}
 
 }
