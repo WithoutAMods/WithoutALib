@@ -14,7 +14,7 @@ public abstract class BaseContainer extends Container {
 
 	private final int INVENTORY_SIZE;
 
-	protected BaseContainer(@Nullable ContainerType<?> type, int id, int containerInventorySize) {
+	public BaseContainer(@Nullable ContainerType<?> type, int id, int containerInventorySize) {
 		super(type, id);
 		this.INVENTORY_SIZE = containerInventorySize;
 	}

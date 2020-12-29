@@ -14,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class BaseScreen<T extends Container> extends ContainerScreen<T> {
 
-   private final ResourceLocation GUI_TEXTURE;
+   protected final ResourceLocation GUI_TEXTURE;
 
    public BaseScreen(T container, ResourceLocation gui_texture, PlayerInventory playerInventory, ITextComponent title, int xSize, int ySize) {
       super(container, playerInventory, title);
