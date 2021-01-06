@@ -47,7 +47,6 @@ public class NBTCondition implements ILootCondition {
 	@Override
 	public boolean test(LootContext lootContext) {
 		INBT nbt = this.source.nbtFunction.apply(lootContext);
-		System.out.println(nbt.toString() + this.nbtPredicate.test(nbt));// TODO
 		return this.nbtPredicate.test(nbt);
 	}
 
