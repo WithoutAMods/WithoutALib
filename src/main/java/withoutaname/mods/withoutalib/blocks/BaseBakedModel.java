@@ -125,20 +125,20 @@ public abstract class BaseBakedModel implements IDynamicBakedModel {
 		double tz = to.getZ();
 
 		quads.add(createQuad(v(fx, ty, fz), v(fx, ty, tz), v(tx, ty, tz), v(tx, ty, fz), getUFrom(dynamicUV, up, fx), getUTo(dynamicUV, up, tx), getVFrom(dynamicUV, up, fz), getVTo(dynamicUV, up, tz), up));
-		quads.add(createQuad(v(tx, fy, fz), v(tx, fy, tz), v(fx, fy, tz), v(fx, fy, fz), getUFrom(dynamicUV, down, fx), getUTo(dynamicUV, down, tx), getVFrom(dynamicUV, down, fz), getVTo(dynamicUV, down, tz), down));
-		quads.add(createQuad(v(tx, ty, fz), v(tx, fy, fz), v(fx, fy, fz), v(fx, ty, fz), getUFrom(dynamicUV, north, fx), getUTo(dynamicUV, north, tx), getVFrom(dynamicUV, north, fy), getVTo(dynamicUV, north, ty), north));
-		quads.add(createQuad(v(fx, ty, tz), v(fx, fy, tz), v(tx, fy, tz), v(tx, ty, tz), getUFrom(dynamicUV, south, fx), getUTo(dynamicUV, south, tx), getVFrom(dynamicUV, south, fy), getVTo(dynamicUV, south, ty), south));
-		quads.add(createQuad(v(tx, ty, tz), v(tx, fy, tz), v(tx, fy, fz), v(tx, ty, fz), getUFrom(dynamicUV, east, fz), getUTo(dynamicUV, east, tz), getVFrom(dynamicUV, east, fy), getVTo(dynamicUV, east, ty), east));
-		quads.add(createQuad(v(fx, ty, fz), v(fx, fy, fz), v(fx, fy, tz), v(fx, ty, tz), getUFrom(dynamicUV, west, fz), getUTo(dynamicUV, west, tz), getVFrom(dynamicUV, west, fy), getVTo(dynamicUV, west, ty), west));
+		quads.add(createQuad(v(tx, fy, fz), v(tx, fy, tz), v(fx, fy, tz), v(fx, fy, fz), getUFrom(dynamicUV, down, 1f-tx), getUTo(dynamicUV, down, 1f-fx), getVFrom(dynamicUV, down, fz), getVTo(dynamicUV, down, tz), down));
+		quads.add(createQuad(v(tx, ty, fz), v(tx, fy, fz), v(fx, fy, fz), v(fx, ty, fz), getUFrom(dynamicUV, north, 1f-tx), getUTo(dynamicUV, north, 1f-fx), getVFrom(dynamicUV, north, 1f-ty), getVTo(dynamicUV, north, 1f-fy), north));
+		quads.add(createQuad(v(fx, ty, tz), v(fx, fy, tz), v(tx, fy, tz), v(tx, ty, tz), getUFrom(dynamicUV, south, fx), getUTo(dynamicUV, south, tx), getVFrom(dynamicUV, south, 1f-ty), getVTo(dynamicUV, south, 1f-fy), south));
+		quads.add(createQuad(v(tx, ty, tz), v(tx, fy, tz), v(tx, fy, fz), v(tx, ty, fz), getUFrom(dynamicUV, east, 1f-tz), getUTo(dynamicUV, east, 1f-fz), getVFrom(dynamicUV, east, 1f-ty), getVTo(dynamicUV, east, 1f-fy), east));
+		quads.add(createQuad(v(fx, ty, fz), v(fx, fy, fz), v(fx, fy, tz), v(fx, ty, tz), getUFrom(dynamicUV, west, fz), getUTo(dynamicUV, west, tz), getVFrom(dynamicUV, west, 1f-ty), getVTo(dynamicUV, west, 1f-fy), west));
 
 		if (withReversed) {
 
 			quads.add(createQuad(v(fx, ty, fz), v(fx, ty, tz), v(tx, ty, tz), v(tx, ty, fz), getUFrom(dynamicUV, up, fx), getUTo(dynamicUV, up, tx), getVFrom(dynamicUV, up, fz), getVTo(dynamicUV, up, tz), up, true));
-			quads.add(createQuad(v(tx, fy, fz), v(tx, fy, tz), v(fx, fy, tz), v(fx, fy, fz), getUFrom(dynamicUV, down, fx), getUTo(dynamicUV, down, tx), getVFrom(dynamicUV, down, fz), getVTo(dynamicUV, down, tz), down, true));
-			quads.add(createQuad(v(tx, ty, fz), v(tx, fy, fz), v(fx, fy, fz), v(fx, ty, fz), getUFrom(dynamicUV, north, fx), getUTo(dynamicUV, north, tx), getVFrom(dynamicUV, north, fy), getVTo(dynamicUV, north, ty), north, true));
-			quads.add(createQuad(v(fx, ty, tz), v(fx, fy, tz), v(tx, fy, tz), v(tx, ty, tz), getUFrom(dynamicUV, south, fx), getUTo(dynamicUV, south, tx), getVFrom(dynamicUV, south, fy), getVTo(dynamicUV, south, ty), south, true));
-			quads.add(createQuad(v(tx, ty, tz), v(tx, fy, tz), v(tx, fy, fz), v(tx, ty, fz), getUFrom(dynamicUV, east, fz), getUTo(dynamicUV, east, tz), getVFrom(dynamicUV, east, fy), getVTo(dynamicUV, east, ty), east, true));
-			quads.add(createQuad(v(fx, ty, fz), v(fx, fy, fz), v(fx, fy, tz), v(fx, ty, tz), getUFrom(dynamicUV, west, fz), getUTo(dynamicUV, west, tz), getVFrom(dynamicUV, west, fy), getVTo(dynamicUV, west, ty), west, true));
+			quads.add(createQuad(v(tx, fy, fz), v(tx, fy, tz), v(fx, fy, tz), v(fx, fy, fz), getUFrom(dynamicUV, down, 1f-tx), getUTo(dynamicUV, down, 1f-fx), getVFrom(dynamicUV, down, fz), getVTo(dynamicUV, down, tz), down, true));
+			quads.add(createQuad(v(tx, ty, fz), v(tx, fy, fz), v(fx, fy, fz), v(fx, ty, fz), getUFrom(dynamicUV, north, 1f-tx), getUTo(dynamicUV, north, 1f-fx), getVFrom(dynamicUV, north, 1f-ty), getVTo(dynamicUV, north, 1f-fy), north, true));
+			quads.add(createQuad(v(fx, ty, tz), v(fx, fy, tz), v(tx, fy, tz), v(tx, ty, tz), getUFrom(dynamicUV, south, fx), getUTo(dynamicUV, south, tx), getVFrom(dynamicUV, south, 1f-ty), getVTo(dynamicUV, south, 1f-fy), south, true));
+			quads.add(createQuad(v(tx, ty, tz), v(tx, fy, tz), v(tx, fy, fz), v(tx, ty, fz), getUFrom(dynamicUV, east, 1f-tz), getUTo(dynamicUV, east, 1f-fz), getVFrom(dynamicUV, east, 1f-ty), getVTo(dynamicUV, east, 1f-fy), east, true));
+			quads.add(createQuad(v(fx, ty, fz), v(fx, fy, fz), v(fx, fy, tz), v(fx, ty, tz), getUFrom(dynamicUV, west, fz), getUTo(dynamicUV, west, tz), getVFrom(dynamicUV, west, 1f-ty), getVTo(dynamicUV, west, 1f-fy), west, true));
 
 		}
 		return quads;
