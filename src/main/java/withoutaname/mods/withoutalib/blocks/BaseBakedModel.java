@@ -124,40 +124,40 @@ public abstract class BaseBakedModel implements IDynamicBakedModel {
 		double ty = to.getY();
 		double tz = to.getZ();
 
-		quads.add(createQuad(v(fx, ty, fz), v(fx, ty, tz), v(tx, ty, tz), v(tx, ty, fz), getUFrom(dynamicUV, up, fx), getUTo(dynamicUV, up, tx), getVFrom(dynamicUV, up, fz), getVTo(dynamicUV, up, tz), up));
-		quads.add(createQuad(v(tx, fy, fz), v(tx, fy, tz), v(fx, fy, tz), v(fx, fy, fz), getUFrom(dynamicUV, down, 1f-tx), getUTo(dynamicUV, down, 1f-fx), getVFrom(dynamicUV, down, fz), getVTo(dynamicUV, down, tz), down));
-		quads.add(createQuad(v(tx, ty, fz), v(tx, fy, fz), v(fx, fy, fz), v(fx, ty, fz), getUFrom(dynamicUV, north, 1f-tx), getUTo(dynamicUV, north, 1f-fx), getVFrom(dynamicUV, north, 1f-ty), getVTo(dynamicUV, north, 1f-fy), north));
-		quads.add(createQuad(v(fx, ty, tz), v(fx, fy, tz), v(tx, fy, tz), v(tx, ty, tz), getUFrom(dynamicUV, south, fx), getUTo(dynamicUV, south, tx), getVFrom(dynamicUV, south, 1f-ty), getVTo(dynamicUV, south, 1f-fy), south));
-		quads.add(createQuad(v(tx, ty, tz), v(tx, fy, tz), v(tx, fy, fz), v(tx, ty, fz), getUFrom(dynamicUV, east, 1f-tz), getUTo(dynamicUV, east, 1f-fz), getVFrom(dynamicUV, east, 1f-ty), getVTo(dynamicUV, east, 1f-fy), east));
-		quads.add(createQuad(v(fx, ty, fz), v(fx, fy, fz), v(fx, fy, tz), v(fx, ty, tz), getUFrom(dynamicUV, west, fz), getUTo(dynamicUV, west, tz), getVFrom(dynamicUV, west, 1f-ty), getVTo(dynamicUV, west, 1f-fy), west));
+		quads.add(createQuad(v(fx, ty, fz), v(fx, ty, tz), v(tx, ty, tz), v(tx, ty, fz), getUFrom(dynamicUV, fx), getUTo(dynamicUV, tx), getVFrom(dynamicUV, fz), getVTo(dynamicUV, tz), up));
+		quads.add(createQuad(v(tx, fy, fz), v(tx, fy, tz), v(fx, fy, tz), v(fx, fy, fz), getUFrom(dynamicUV, 1f-tx), getUTo(dynamicUV, 1f-fx), getVFrom(dynamicUV, fz), getVTo(dynamicUV, tz), down));
+		quads.add(createQuad(v(tx, ty, fz), v(tx, fy, fz), v(fx, fy, fz), v(fx, ty, fz), getUFrom(dynamicUV, 1f-tx), getUTo(dynamicUV, 1f-fx), getVFrom(dynamicUV, 1f-ty), getVTo(dynamicUV, 1f-fy), north));
+		quads.add(createQuad(v(fx, ty, tz), v(fx, fy, tz), v(tx, fy, tz), v(tx, ty, tz), getUFrom(dynamicUV, fx), getUTo(dynamicUV, tx), getVFrom(dynamicUV, 1f-ty), getVTo(dynamicUV, 1f-fy), south));
+		quads.add(createQuad(v(tx, ty, tz), v(tx, fy, tz), v(tx, fy, fz), v(tx, ty, fz), getUFrom(dynamicUV, 1f-tz), getUTo(dynamicUV, 1f-fz), getVFrom(dynamicUV, 1f-ty), getVTo(dynamicUV, 1f-fy), east));
+		quads.add(createQuad(v(fx, ty, fz), v(fx, fy, fz), v(fx, fy, tz), v(fx, ty, tz), getUFrom(dynamicUV, fz), getUTo(dynamicUV, tz), getVFrom(dynamicUV, 1f-ty), getVTo(dynamicUV, 1f-fy), west));
 
 		if (withReversed) {
 
-			quads.add(createQuad(v(fx, ty, fz), v(fx, ty, tz), v(tx, ty, tz), v(tx, ty, fz), getUFrom(dynamicUV, up, fx), getUTo(dynamicUV, up, tx), getVFrom(dynamicUV, up, fz), getVTo(dynamicUV, up, tz), up, true));
-			quads.add(createQuad(v(tx, fy, fz), v(tx, fy, tz), v(fx, fy, tz), v(fx, fy, fz), getUFrom(dynamicUV, down, 1f-tx), getUTo(dynamicUV, down, 1f-fx), getVFrom(dynamicUV, down, fz), getVTo(dynamicUV, down, tz), down, true));
-			quads.add(createQuad(v(tx, ty, fz), v(tx, fy, fz), v(fx, fy, fz), v(fx, ty, fz), getUFrom(dynamicUV, north, 1f-tx), getUTo(dynamicUV, north, 1f-fx), getVFrom(dynamicUV, north, 1f-ty), getVTo(dynamicUV, north, 1f-fy), north, true));
-			quads.add(createQuad(v(fx, ty, tz), v(fx, fy, tz), v(tx, fy, tz), v(tx, ty, tz), getUFrom(dynamicUV, south, fx), getUTo(dynamicUV, south, tx), getVFrom(dynamicUV, south, 1f-ty), getVTo(dynamicUV, south, 1f-fy), south, true));
-			quads.add(createQuad(v(tx, ty, tz), v(tx, fy, tz), v(tx, fy, fz), v(tx, ty, fz), getUFrom(dynamicUV, east, 1f-tz), getUTo(dynamicUV, east, 1f-fz), getVFrom(dynamicUV, east, 1f-ty), getVTo(dynamicUV, east, 1f-fy), east, true));
-			quads.add(createQuad(v(fx, ty, fz), v(fx, fy, fz), v(fx, fy, tz), v(fx, ty, tz), getUFrom(dynamicUV, west, fz), getUTo(dynamicUV, west, tz), getVFrom(dynamicUV, west, 1f-ty), getVTo(dynamicUV, west, 1f-fy), west, true));
+			quads.add(createQuad(v(fx, ty, fz), v(fx, ty, tz), v(tx, ty, tz), v(tx, ty, fz), getUFrom(dynamicUV, fx), getUTo(dynamicUV, tx), getVFrom(dynamicUV, fz), getVTo(dynamicUV, tz), up, true));
+			quads.add(createQuad(v(tx, fy, fz), v(tx, fy, tz), v(fx, fy, tz), v(fx, fy, fz), getUFrom(dynamicUV, 1f-tx), getUTo(dynamicUV, 1f-fx), getVFrom(dynamicUV, fz), getVTo(dynamicUV, tz), down, true));
+			quads.add(createQuad(v(tx, ty, fz), v(tx, fy, fz), v(fx, fy, fz), v(fx, ty, fz), getUFrom(dynamicUV, 1f-tx), getUTo(dynamicUV, 1f-fx), getVFrom(dynamicUV, 1f-ty), getVTo(dynamicUV, 1f-fy), north, true));
+			quads.add(createQuad(v(fx, ty, tz), v(fx, fy, tz), v(tx, fy, tz), v(tx, ty, tz), getUFrom(dynamicUV, fx), getUTo(dynamicUV, tx), getVFrom(dynamicUV, 1f-ty), getVTo(dynamicUV, 1f-fy), south, true));
+			quads.add(createQuad(v(tx, ty, tz), v(tx, fy, tz), v(tx, fy, fz), v(tx, ty, fz), getUFrom(dynamicUV, 1f-tz), getUTo(dynamicUV, 1f-fz), getVFrom(dynamicUV, 1f-ty), getVTo(dynamicUV, 1f-fy), east, true));
+			quads.add(createQuad(v(fx, ty, fz), v(fx, fy, fz), v(fx, fy, tz), v(fx, ty, tz), getUFrom(dynamicUV, fz), getUTo(dynamicUV, tz), getVFrom(dynamicUV, 1f-ty), getVTo(dynamicUV, 1f-fy), west, true));
 
 		}
 		return quads;
 	}
 
-	private float getUFrom(boolean dynamicUV, TextureAtlasSprite sprite, double d) {
-		return dynamicUV && 0 <= d && d <= 1 ? sprite.getWidth() * (float) d : 0;
+	private float getUFrom(boolean dynamicUV, double d) {
+		return dynamicUV && 0 <= d && d <= 1 ? 16 * (float) d : 0;
 	}
 
-	private float getUTo(boolean dynamicUV, TextureAtlasSprite sprite, double d) {
-		return dynamicUV && 0 <= d && d <= 1 ? sprite.getWidth() * (float) d : sprite.getWidth();
+	private float getUTo(boolean dynamicUV, double d) {
+		return dynamicUV && 0 <= d && d <= 1 ? 16 * (float) d : 16;
 	}
 
-	private float getVFrom(boolean dynamicUV, TextureAtlasSprite sprite, double d) {
-		return dynamicUV && 0 <= d && d <= 1 ? sprite.getHeight() * (float) d : 0;
+	private float getVFrom(boolean dynamicUV, double d) {
+		return dynamicUV && 0 <= d && d <= 1 ? 16 * (float) d : 0;
 	}
 
-	private float getVTo(boolean dynamicUV, TextureAtlasSprite sprite, double d) {
-		return dynamicUV && 0 <= d && d <= 1 ? sprite.getHeight() * (float) d : sprite.getHeight();
+	private float getVTo(boolean dynamicUV, double d) {
+		return dynamicUV && 0 <= d && d <= 1 ? 16 * (float) d : 16;
 	}
 
 	@Override
