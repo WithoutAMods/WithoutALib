@@ -7,6 +7,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
 import net.minecraft.data.LootTableProvider;
+import net.minecraft.item.BlockItem;
 import net.minecraft.loot.*;
 import net.minecraft.loot.conditions.SurvivesExplosion;
 import net.minecraft.util.IItemProvider;
@@ -33,6 +34,10 @@ public abstract class BaseLootTableProvider extends LootTableProvider {
 	}
 
 	protected abstract void addTables();
+
+	protected void createStandardTable(BlockItem blockItem) {
+		createStandardTable(blockItem.getBlock(), blockItem);
+	}
 
 	protected void createStandardTable(Block block, IItemProvider loot) {
 		lootTables.put(block, getStandardLootTable(getStandardLootPool(block.getRegistryName().toString(), getStandardItemLootEntry(loot))));
