@@ -12,9 +12,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
-import org.jetbrains.annotations.NotNull;
 import withoutaname.mods.withoutalib.WithoutALib;
 
+import javax.annotation.Nonnull;
 import java.util.function.Function;
 
 public class NBTCondition implements ILootCondition {
@@ -38,7 +38,7 @@ public class NBTCondition implements ILootCondition {
 		this.nbtPredicate = nbtPredicate;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public LootConditionType func_230419_b_() {
 		return LOOT_CONDITION_TYPE;
@@ -68,7 +68,7 @@ public class NBTCondition implements ILootCondition {
 			return this;
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
 		public ILootCondition build() {
 			return new NBTCondition(this.source, this.nbtPredicate);
@@ -79,14 +79,14 @@ public class NBTCondition implements ILootCondition {
 	public static class Serializer implements ILootSerializer<NBTCondition> {
 
 		@Override
-		public void serialize(@NotNull JsonObject jsonObject, @NotNull NBTCondition nbtCondition, @NotNull JsonSerializationContext serializationContext) {
+		public void serialize(@Nonnull JsonObject jsonObject, @Nonnull NBTCondition nbtCondition, @Nonnull JsonSerializationContext serializationContext) {
 			jsonObject.addProperty("source", nbtCondition.source.sourceName);
 			jsonObject.add("nbt_predicate", nbtCondition.nbtPredicate.serialize());
 		}
 
-		@NotNull
+		@Nonnull
 		@Override
-		public NBTCondition deserialize(@NotNull JsonObject jsonObject, @NotNull JsonDeserializationContext deserializationContext) {
+		public NBTCondition deserialize(@Nonnull JsonObject jsonObject, @Nonnull JsonDeserializationContext deserializationContext) {
 			Source source = Source.getByName(JSONUtils.getString(jsonObject, "source"));
 			NBTPredicate nbtPredicate = NBTPredicate.deserialize(jsonObject.get("nbt_predicate"));
 			return new NBTCondition(source, nbtPredicate);
