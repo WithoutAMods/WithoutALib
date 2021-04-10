@@ -27,7 +27,7 @@ public class NBTCondition implements ILootCondition {
 
 	public static void init() {}
 
-	private static final Function<Entity, INBT> NBT_FROM_ENTITY = NBTPredicate::writeToNBTWithSelectedItem;
+	private static final Function<Entity, INBT> NBT_FROM_ENTITY = NBTPredicate::getEntityTagToCompare;
 	private static final Function<TileEntity, INBT> NBT_FROM_TILE_ENTITY = TileEntity::serializeNBT;
 
 	private final Source source;
@@ -40,14 +40,14 @@ public class NBTCondition implements ILootCondition {
 
 	@Nonnull
 	@Override
-	public LootConditionType func_230419_b_() {
+	public LootConditionType getType() {
 		return LOOT_CONDITION_TYPE;
 	}
 
 	@Override
 	public boolean test(LootContext lootContext) {
 		INBT nbt = this.source.nbtFunction.apply(lootContext);
-		return this.nbtPredicate.test(nbt);
+		return this.nbtPredicate.matches(nbt);
 	}
 
 	public static NBTCondition.Builder builder(Source source) {
@@ -81,14 +81,14 @@ public class NBTCondition implements ILootCondition {
 		@Override
 		public void serialize(@Nonnull JsonObject jsonObject, @Nonnull NBTCondition nbtCondition, @Nonnull JsonSerializationContext serializationContext) {
 			jsonObject.addProperty("source", nbtCondition.source.sourceName);
-			jsonObject.add("nbt_predicate", nbtCondition.nbtPredicate.serialize());
+			jsonObject.add("nbt_predicate", nbtCondition.nbtPredicate.serializeToJson());
 		}
 
 		@Nonnull
 		@Override
 		public NBTCondition deserialize(@Nonnull JsonObject jsonObject, @Nonnull JsonDeserializationContext deserializationContext) {
-			Source source = Source.getByName(JSONUtils.getString(jsonObject, "source"));
-			NBTPredicate nbtPredicate = NBTPredicate.deserialize(jsonObject.get("nbt_predicate"));
+			Source source = Source.getByName(JSONUtils.getAsString(jsonObject, "source"));
+			NBTPredicate nbtPredicate = NBTPredicate.fromJson(jsonObject.get("nbt_predicate"));
 			return new NBTCondition(source, nbtPredicate);
 		}
 
@@ -108,7 +108,7 @@ public class NBTCondition implements ILootCondition {
 			this.sourceName = sourceName;
 			this.lootParam = lootParam;
 			this.nbtFunction = (lootContext) -> {
-				T t = lootContext.get(lootParam);
+				T t = lootContext.getParamOrNull(lootParam);
 				return t != null ? nbtFunction.apply(t) : null;
 			};
 		}

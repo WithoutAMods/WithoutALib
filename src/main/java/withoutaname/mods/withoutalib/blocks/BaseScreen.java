@@ -19,24 +19,24 @@ public class BaseScreen<T extends Container> extends ContainerScreen<T> {
    public BaseScreen(T container, ResourceLocation gui_texture, PlayerInventory playerInventory, ITextComponent title, int xSize, int ySize) {
       super(container, playerInventory, title);
       this.GUI_TEXTURE = gui_texture;
-      this.xSize = xSize;
-      this.ySize = ySize;
-      this.playerInventoryTitleY = this.ySize - 94;
+      this.imageWidth = xSize;
+      this.imageHeight = ySize;
+      this.inventoryLabelY = this.imageHeight - 94;
    }
 
    @Override
    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
       this.renderBackground(matrixStack);
       super.render(matrixStack, mouseX, mouseY, partialTicks);
-      this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+      this.renderTooltip(matrixStack, mouseX, mouseY);
    }
 
    @Override
-   protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+   protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
       RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-      this.minecraft.getTextureManager().bindTexture(GUI_TEXTURE);
-      int i = (this.width - this.xSize) / 2;
-      int j = (this.height - this.ySize) / 2;
-      this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+      this.minecraft.getTextureManager().bind(GUI_TEXTURE);
+      int i = (this.width - this.imageWidth) / 2;
+      int j = (this.height - this.imageHeight) / 2;
+      this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
    }
 }

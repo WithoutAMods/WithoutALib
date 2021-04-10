@@ -54,33 +54,33 @@ public abstract class BaseContainer extends Container {
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(index);
-		if (slot != null && slot.getHasStack()) {
-			ItemStack stack = slot.getStack();
+		Slot slot = this.slots.get(index);
+		if (slot != null && slot.hasItem()) {
+			ItemStack stack = slot.getItem();
 			itemstack = stack.copy();
 			if (index < this.INVENTORY_SIZE) {
-				if (!this.mergeItemStack(stack, this.INVENTORY_SIZE, this.INVENTORY_SIZE + 36, false)) {
+				if (!this.moveItemStackTo(stack, this.INVENTORY_SIZE, this.INVENTORY_SIZE + 36, false)) {
 					return ItemStack.EMPTY;
 				}
-				slot.onSlotChange(stack, itemstack);
+				slot.onQuickCraft(stack, itemstack);
 			} else {
-				if (!this.mergeItemStack(stack, 0, this.INVENTORY_SIZE, false)) {
+				if (!this.moveItemStackTo(stack, 0, this.INVENTORY_SIZE, false)) {
 					if (index < this.INVENTORY_SIZE + 27) {
-						if (!this.mergeItemStack(stack, this.INVENTORY_SIZE + 27, this.INVENTORY_SIZE + 36, false)) {
+						if (!this.moveItemStackTo(stack, this.INVENTORY_SIZE + 27, this.INVENTORY_SIZE + 36, false)) {
 							return ItemStack.EMPTY;
 						}
-					} else if (index < this.INVENTORY_SIZE + 36 && !this.mergeItemStack(stack, this.INVENTORY_SIZE, this.INVENTORY_SIZE + 27, false)) {
+					} else if (index < this.INVENTORY_SIZE + 36 && !this.moveItemStackTo(stack, this.INVENTORY_SIZE, this.INVENTORY_SIZE + 27, false)) {
 						return ItemStack.EMPTY;
 					}
 				}
 			}
 
 			if (stack.isEmpty()) {
-				slot.putStack(ItemStack.EMPTY);
+				slot.set(ItemStack.EMPTY);
 			} else {
-				slot.onSlotChanged();
+				slot.setChanged();
 			}
 
 			if (stack.getCount() == itemstack.getCount()) {

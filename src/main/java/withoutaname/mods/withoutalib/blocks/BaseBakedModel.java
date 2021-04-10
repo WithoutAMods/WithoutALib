@@ -36,8 +36,8 @@ public abstract class BaseBakedModel implements IDynamicBakedModel {
 				case UV:
 					switch (e.getIndex()) {
 						case 0:
-							float iu = sprite.getInterpolatedU(u);
-							float iv = sprite.getInterpolatedV(v);
+							float iu = sprite.getU(u);
+							float iv = sprite.getV(v);
 							builder.put(j, iu, iv);
 							break;
 						case 2:
@@ -79,8 +79,8 @@ public abstract class BaseBakedModel implements IDynamicBakedModel {
 
 	protected BakedQuad createQuad(Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, float uFrom, float uTo, float vFrom, float vTo, TextureAtlasSprite sprite, boolean reversed) {
 		Vector3d normal = reversed ?
-				v3.subtract(v1).crossProduct(v2.subtract(v1)).normalize() :
-				v3.subtract(v2).crossProduct(v1.subtract(v2)).normalize();
+				v3.subtract(v1).cross(v2.subtract(v1)).normalize() :
+				v3.subtract(v2).cross(v1.subtract(v2)).normalize();
 
 		if (reversed) {
 			Vector3d v0;
@@ -93,7 +93,7 @@ public abstract class BaseBakedModel implements IDynamicBakedModel {
 		}
 
 		BakedQuadBuilder builder = new BakedQuadBuilder(sprite);
-		builder.setQuadOrientation(Direction.getFacingFromVector(normal.x, normal.y, normal.z));
+		builder.setQuadOrientation(Direction.getNearest(normal.x, normal.y, normal.z));
 		putVertex(builder, normal, v1.x, v1.y, v1.z, reversed ? uTo : uFrom, vFrom, sprite);
 		putVertex(builder, normal, v2.x, v2.y, v2.z, reversed ? uTo : uFrom, vTo, sprite);
 		putVertex(builder, normal, v3.x, v3.y, v3.z, reversed ? uFrom : uTo, vTo, sprite);
@@ -117,12 +117,12 @@ public abstract class BaseBakedModel implements IDynamicBakedModel {
 	protected List<BakedQuad> createCube(Vector3d from, Vector3d to, TextureAtlasSprite up, TextureAtlasSprite down, TextureAtlasSprite north, TextureAtlasSprite south, TextureAtlasSprite east, TextureAtlasSprite west, boolean dynamicUV, boolean withReversed) {
 		List<BakedQuad> quads = new ArrayList<>();
 
-		double fx = from.getX();
-		double fy = from.getY();
-		double fz = from.getZ();
-		double tx = to.getX();
-		double ty = to.getY();
-		double tz = to.getZ();
+		double fx = from.x();
+		double fy = from.y();
+		double fz = from.z();
+		double tx = to.x();
+		double ty = to.y();
+		double tz = to.z();
 
 		quads.add(createQuad(v(fx, ty, fz), v(fx, ty, tz), v(tx, ty, tz), v(tx, ty, fz), getUFrom(dynamicUV, fx), getUTo(dynamicUV, tx), getVFrom(dynamicUV, fz), getVTo(dynamicUV, tz), up));
 		quads.add(createQuad(v(tx, fy, fz), v(tx, fy, tz), v(fx, fy, tz), v(fx, fy, fz), getUFrom(dynamicUV, 1f-tx), getUTo(dynamicUV, 1f-fx), getVFrom(dynamicUV, fz), getVTo(dynamicUV, tz), down));
@@ -161,7 +161,7 @@ public abstract class BaseBakedModel implements IDynamicBakedModel {
 	}
 
 	@Override
-	public boolean isAmbientOcclusion() {
+	public boolean useAmbientOcclusion() {
 		return true;
 	}
 
@@ -171,12 +171,12 @@ public abstract class BaseBakedModel implements IDynamicBakedModel {
 	}
 
 	@Override
-	public boolean isSideLit() {
+	public boolean usesBlockLight() {
 		return false;
 	}
 
 	@Override
-	public boolean isBuiltInRenderer() {
+	public boolean isCustomRenderer() {
 		return false;
 	}
 
