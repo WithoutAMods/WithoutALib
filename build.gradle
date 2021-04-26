@@ -26,7 +26,7 @@ repositories {
         url "https://maven.tterrag.com/"
     }
     maven {
-        url = "https://modmaven.k-4u.nl"
+        url = "https://modmaven.dev"
     }
     maven { // JEI
         url "http://dvs1.progwml6.com/files/maven"
@@ -98,9 +98,7 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${jei_version}")
 
-    compile fg.deobf(project.dependencies.create("mcjty.theoneprobe:TheOneProbe-${top_version}") {
-        transitive = false
-    })
+    compile fg.deobf("mcjty.theoneprobe:TheOneProbe-${top_version}")
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
@@ -126,12 +124,9 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "examplemod",
-            "Specification-Vendor": "examplemodsareus",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"examplemodsareus",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
@@ -146,15 +141,27 @@ def reobfArtifact = artifacts.add('default', reobfFile) {
     type 'jar'
     builtBy 'reobfJar'
 }
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact reobfArtifact
+            pom {
+                name = "${group}:${archivesBaseName}"
+                description = 'Libary for all mods by WithoutAName (https://github.com/WithoutAMods)'
+                url = 'https://github.com/WithoutAMods/WithoutALib'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+            }
         }
     }
     repositories {
-        maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
+        mavenLocal {
+            url "file:///${project.projectDir}/../mcmodsrepo"
         }
     }
 }
