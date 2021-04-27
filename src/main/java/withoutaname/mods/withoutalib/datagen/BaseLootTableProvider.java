@@ -1,5 +1,11 @@
 package withoutaname.mods.withoutalib.datagen;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+import javax.annotation.Nonnull;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.block.Block;
@@ -14,11 +20,6 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class BaseLootTableProvider extends LootTableProvider {
 
@@ -35,10 +36,17 @@ public abstract class BaseLootTableProvider extends LootTableProvider {
 
 	protected abstract void addTables();
 
+	/**
+	 * @param blockItem item which should drop if the corresponding block is destroyed
+	 */
 	protected void createStandardTable(BlockItem blockItem) {
 		createStandardTable(blockItem.getBlock(), blockItem);
 	}
 
+	/**
+	 * @param block block which should drop the given loot
+	 * @param loot loot of the block
+	 */
 	protected void createStandardTable(Block block, IItemProvider loot) {
 		lootTables.put(block, getStandardLootTable(getStandardLootPool(block.getRegistryName().toString(), getStandardItemLootEntry(loot))));
 	}
@@ -60,7 +68,7 @@ public abstract class BaseLootTableProvider extends LootTableProvider {
 	}
 
 	@Override
-	public void run(DirectoryCache cache) {
+	public void run(@Nonnull DirectoryCache cache) {
 		addTables();
 
 		Map<ResourceLocation, LootTable> tables = new HashMap<>();
@@ -70,7 +78,7 @@ public abstract class BaseLootTableProvider extends LootTableProvider {
 		writeTables(cache, tables);
 	}
 
-	private void writeTables(DirectoryCache cache, Map<ResourceLocation, LootTable> tables) {
+	private void writeTables(DirectoryCache cache, @Nonnull Map<ResourceLocation, LootTable> tables) {
 		Path outputFolder = this.generator.getOutputFolder();
 		tables.forEach((key, lootTable) -> {
 			Path path = outputFolder.resolve("data/" + key.getNamespace() + "/loot_tables/" + key.getPath() + ".json");
@@ -82,6 +90,7 @@ public abstract class BaseLootTableProvider extends LootTableProvider {
 		});
 	}
 
+	@Nonnull
 	@Override
 	public String getName() {
 		return "LootTables";

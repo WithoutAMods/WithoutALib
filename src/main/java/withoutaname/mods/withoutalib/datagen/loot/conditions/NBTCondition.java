@@ -1,5 +1,8 @@
 package withoutaname.mods.withoutalib.datagen.loot.conditions;
 
+import java.util.function.Function;
+import javax.annotation.Nonnull;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
@@ -12,15 +15,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
-import withoutaname.mods.withoutalib.WithoutALib;
 
-import javax.annotation.Nonnull;
-import java.util.function.Function;
+import withoutaname.mods.withoutalib.WithoutALib;
 
 public class NBTCondition implements ILootCondition {
 
 	public static final LootConditionType LOOT_CONDITION_TYPE = register("nbt_condition", new Serializer());
 
+	@Nonnull
 	private static LootConditionType register(String registryName, ILootSerializer<? extends ILootCondition> serializer) {
 		return Registry.register(Registry.LOOT_CONDITION_TYPE, new ResourceLocation(WithoutALib.MODID, registryName), new LootConditionType(serializer));
 	}
