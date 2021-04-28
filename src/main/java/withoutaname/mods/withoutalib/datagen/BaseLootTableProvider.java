@@ -22,39 +22,42 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public abstract class BaseLootTableProvider extends LootTableProvider {
-
+	
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-
+	
 	protected final Map<Block, LootTable.Builder> lootTables = new HashMap<>();
 	private final DataGenerator generator;
-
+	
 	public BaseLootTableProvider(DataGenerator dataGeneratorIn) {
 		super(dataGeneratorIn);
 		this.generator = dataGeneratorIn;
 	}
-
+	
 	protected abstract void addTables();
-
+	
 	/**
-	 * @param blockItem item which should drop if the corresponding block is destroyed
+	 * @param blockItem
+	 * 		item which should drop if the corresponding block is destroyed
 	 */
 	protected void createStandardTable(BlockItem blockItem) {
 		createStandardTable(blockItem.getBlock(), blockItem);
 	}
-
+	
 	/**
-	 * @param block block which should drop the given loot
-	 * @param loot loot of the block
+	 * @param block
+	 * 		block which should drop the given loot
+	 * @param loot
+	 * 		loot of the block
 	 */
 	protected void createStandardTable(Block block, IItemProvider loot) {
 		lootTables.put(block, getStandardLootTable(getStandardLootPool(block.getRegistryName().toString(), getStandardItemLootEntry(loot))));
 	}
-
+	
 	protected LootTable.Builder getStandardLootTable(LootPool.Builder lootPoolIn) {
 		return LootTable.lootTable().withPool(lootPoolIn);
 	}
-
+	
 	protected LootPool.Builder getStandardLootPool(String name, LootEntry.Builder<?> entriesBuilder) {
 		return LootPool.lootPool()
 				.name(name)
@@ -62,22 +65,22 @@ public abstract class BaseLootTableProvider extends LootTableProvider {
 				.add(entriesBuilder)
 				.when(SurvivesExplosion.survivesExplosion());
 	}
-
+	
 	protected StandaloneLootEntry.Builder<?> getStandardItemLootEntry(IItemProvider itemIn) {
 		return ItemLootEntry.lootTableItem(itemIn);
 	}
-
+	
 	@Override
 	public void run(@Nonnull DirectoryCache cache) {
 		addTables();
-
+		
 		Map<ResourceLocation, LootTable> tables = new HashMap<>();
 		for (Map.Entry<Block, LootTable.Builder> entry : lootTables.entrySet()) {
 			tables.put(entry.getKey().getLootTable(), entry.getValue().setParamSet(LootParameterSets.BLOCK).build());
 		}
 		writeTables(cache, tables);
 	}
-
+	
 	private void writeTables(DirectoryCache cache, @Nonnull Map<ResourceLocation, LootTable> tables) {
 		Path outputFolder = this.generator.getOutputFolder();
 		tables.forEach((key, lootTable) -> {
@@ -89,11 +92,11 @@ public abstract class BaseLootTableProvider extends LootTableProvider {
 			}
 		});
 	}
-
+	
 	@Nonnull
 	@Override
 	public String getName() {
 		return "LootTables";
 	}
-
+	
 }
