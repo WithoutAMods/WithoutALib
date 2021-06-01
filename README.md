@@ -7,6 +7,7 @@ This is a libary for all mods by WithoutAName.
         maven { // WithoutALib
             url "https://mineplay.link/maven/"
         }
+    }
 
     dependencies {
         compile fg.deobf("withoutaname.mods.withoutalib:WithoutALib:${withoutalib_version}")
