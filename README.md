@@ -1,6 +1,6 @@
 # [WithoutALib](https://www.curseforge.com/minecraft/mc-mods/withoutalib "WithoutALib on CurseForge") - Minecraft Forge Mod
 
-This is a libary for all mods by WithoutAName.
+This is a library for all mods by WithoutAName.
 
 ## Maven
     repositories {
