@@ -26,7 +26,7 @@ repositories {
     }
 }
 
-version = "${withoutalib_version}"
+version = "${minecraft_version}-${withoutalib_version}"
 group = 'withoutaname.mods.withoutalib' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'WithoutALib'
 
