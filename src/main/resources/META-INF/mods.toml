@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/WithoutAMods/${mod_github}/issues"
 
 [[mods]]
     modId="${mod_id}"
-    version="${mod_version}"
+    version="${minecraft_version}-${mod_version}"
     displayName="${mod_name}"
     #updateJSONURL="https://change.me.example.invalid/updates.json"
     displayURL="https://github.com/WithoutAMods/${mod_github}"
@@ -25,12 +25,5 @@ issueTrackerURL="https://github.com/WithoutAMods/${mod_github}/issues"
     modId="minecraft"
     mandatory=true
     versionRange="${minecraft_version_range}"
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.${mod_id}]]
-    modId="withoutalib"
-    mandatory=true
-    versionRange="[${withoutalib_version},)"
     ordering="NONE"
     side="BOTH"
