@@ -3,19 +3,19 @@ package withoutaname.mods.withoutalib.blocks;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-public abstract class BaseContainer extends Container {
+public abstract class BaseContainer extends AbstractContainerMenu {
 	
 	private final int INVENTORY_SIZE;
 	
-	public BaseContainer(@Nullable ContainerType<?> type, int id, int containerInventorySize) {
+	public BaseContainer(@Nullable MenuType<?> type, int id, int containerInventorySize) {
 		super(type, id);
 		this.INVENTORY_SIZE = containerInventorySize;
 	}
@@ -23,17 +23,11 @@ public abstract class BaseContainer extends Container {
 	/**
 	 * Adds a row of slots to the GUI.
 	 *
-	 * @param handler
-	 *        {@link IItemHandler} of the slots
-	 * @param index
-	 * 		index of the first slot
-	 * @param x
-	 * 		x-position of the first slot
-	 * @param y
-	 * 		y-position of the first slot
-	 * @param amountX
-	 * 		amount of slots which should be added
-	 *
+	 * @param handler {@link IItemHandler} of the slots
+	 * @param index   index of the first slot
+	 * @param x       x-position of the first slot
+	 * @param y       y-position of the first slot
+	 * @param amountX amount of slots which should be added
 	 * @return index of the next slot after this row
 	 */
 	protected int addSlotRow(IItemHandler handler, int index, int x, int y, int amountX) {
@@ -43,19 +37,12 @@ public abstract class BaseContainer extends Container {
 	/**
 	 * Adds a row of slots to the GUI.
 	 *
-	 * @param handler
-	 *        {@link IItemHandler} of the slots
-	 * @param index
-	 * 		index of the first slot
-	 * @param x
-	 * 		x-position of the first slot
-	 * @param y
-	 * 		y-position of the first slot
-	 * @param amountX
-	 * 		amount of slots which should be added
-	 * @param distanceX
-	 * 		distance in x-direction between slots
-	 *
+	 * @param handler   {@link IItemHandler} of the slots
+	 * @param index     index of the first slot
+	 * @param x         x-position of the first slot
+	 * @param y         y-position of the first slot
+	 * @param amountX   amount of slots which should be added
+	 * @param distanceX distance in x-direction between slots
 	 * @return index of the next slot after this row
 	 */
 	protected int addSlotRow(IItemHandler handler, int index, int x, int y, int amountX, int distanceX) {
@@ -70,19 +57,12 @@ public abstract class BaseContainer extends Container {
 	/**
 	 * Adds a box of slots to the GUI.
 	 *
-	 * @param handler
-	 *        {@link IItemHandler} of the slots
-	 * @param index
-	 * 		index of the first slot
-	 * @param x
-	 * 		x-position of the first slot
-	 * @param y
-	 * 		y-position of the first slot
-	 * @param amountX
-	 * 		amount of slots in one row
-	 * @param amountY
-	 * 		amount of rows
-	 *
+	 * @param handler {@link IItemHandler} of the slots
+	 * @param index   index of the first slot
+	 * @param x       x-position of the first slot
+	 * @param y       y-position of the first slot
+	 * @param amountX amount of slots in one row
+	 * @param amountY amount of rows
 	 * @return index of the next slot after this box
 	 */
 	protected int addSlotBox(IItemHandler handler, int index, int x, int y, int amountX, int amountY) {
@@ -92,23 +72,14 @@ public abstract class BaseContainer extends Container {
 	/**
 	 * Adds a box of slots to the GUI.
 	 *
-	 * @param handler
-	 *        {@link IItemHandler} of the slots
-	 * @param index
-	 * 		index of the first slot
-	 * @param x
-	 * 		x-position of the first slot
-	 * @param y
-	 * 		y-position of the first slot
-	 * @param amountX
-	 * 		amount of slots in one row
-	 * @param amountY
-	 * 		amount of rows
-	 * @param distanceX
-	 * 		distance in x-direction between slots
-	 * @param distanceY
-	 * 		distance in y-direction between slots
-	 *
+	 * @param handler   {@link IItemHandler} of the slots
+	 * @param index     index of the first slot
+	 * @param x         x-position of the first slot
+	 * @param y         y-position of the first slot
+	 * @param amountX   amount of slots in one row
+	 * @param amountY   amount of rows
+	 * @param distanceX distance in x-direction between slots
+	 * @param distanceY distance in y-direction between slots
 	 * @return index of the next slot after this box
 	 */
 	protected int addSlotBox(IItemHandler handler, int index, int x, int y, int amountX, int amountY, int distanceX, int distanceY) {
@@ -122,12 +93,9 @@ public abstract class BaseContainer extends Container {
 	/**
 	 * adds all player inventory slots to the GUI
 	 *
-	 * @param playerInventory
-	 *        {@link IItemHandler} of the inventory
-	 * @param x
-	 * 		x-position of the first slot
-	 * @param y
-	 * 		y-position of the first slot
+	 * @param playerInventory {@link IItemHandler} of the inventory
+	 * @param x               x-position of the first slot
+	 * @param y               y-position of the first slot
 	 */
 	protected void addPlayerInventorySlots(IItemHandler playerInventory, int x, int y) {
 		// Player inventory
@@ -140,7 +108,7 @@ public abstract class BaseContainer extends Container {
 	
 	@Nonnull
 	@Override
-	public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(index);
 		if (slot != null && slot.hasItem()) {

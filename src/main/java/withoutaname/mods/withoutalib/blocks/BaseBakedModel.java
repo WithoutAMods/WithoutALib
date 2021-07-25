@@ -5,32 +5,33 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.ItemOverrideList;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.Direction;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
+import withoutaname.mods.withoutalib.tools.VectorUtils;
 
 public abstract class BaseBakedModel implements IDynamicBakedModel {
 	
 	/**
-	 * just as short form of "new Vector3d(x, y, z)
+	 * just as short form of "new Vector3f(x, y, z)"
 	 *
-	 * @return new Vector3d(x, y, z)
+	 * @return new Vector3f(x, y, z)
 	 */
-	protected static Vector3d v(double x, double y, double z) {
-		return new Vector3d(x, y, z);
+	protected static Vector3f v(float x, float y, float z) {
+		return new Vector3f(x, y, z);
 	}
 	
-	protected void putVertex(BakedQuadBuilder builder, Vector3d normal,
+	protected void putVertex(BakedQuadBuilder builder, Vector3f normal,
 							 double x, double y, double z, float u, float v, TextureAtlasSprite sprite) {
 		putVertex(builder, normal, x, y, z, u, v, sprite, 1.0f, 1.0f, 1.0f);
 	}
 	
-	protected void putVertex(@Nonnull BakedQuadBuilder builder, Vector3d normal,
+	protected void putVertex(@Nonnull BakedQuadBuilder builder, Vector3f normal,
 							 double x, double y, double z, float u, float v, TextureAtlasSprite sprite, float r, float g, float b) {
 		
 		ImmutableList<VertexFormatElement> elements = builder.getVertexFormat().getElements().asList();
@@ -45,21 +46,17 @@ public abstract class BaseBakedModel implements IDynamicBakedModel {
 					break;
 				case UV:
 					switch (e.getIndex()) {
-						case 0:
+						case 0 -> {
 							float iu = sprite.getU(u);
 							float iv = sprite.getV(v);
 							builder.put(j, iu, iv);
-							break;
-						case 2:
-							builder.put(j, (short) 0, (short) 0);
-							break;
-						default:
-							builder.put(j);
-							break;
+						}
+						case 2 -> builder.put(j, (short) 0, (short) 0);
+						default -> builder.put(j);
 					}
 					break;
 				case NORMAL:
-					builder.put(j, (float) normal.x, (float) normal.y, (float) normal.z);
+					builder.put(j, normal.x(), normal.y(), normal.z());
 					break;
 				default:
 					builder.put(j);
@@ -68,28 +65,28 @@ public abstract class BaseBakedModel implements IDynamicBakedModel {
 		}
 	}
 	
-	protected BakedQuad createQuad(Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, TextureAtlasSprite sprite) {
+	protected BakedQuad createQuad(Vector3f v1, Vector3f v2, Vector3f v3, Vector3f v4, TextureAtlasSprite sprite) {
 		return createQuad(v1, v2, v3, v4, sprite, false);
 	}
 	
-	protected BakedQuad createQuad(Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, @Nonnull TextureAtlasSprite sprite, boolean reversed) {
+	protected BakedQuad createQuad(Vector3f v1, Vector3f v2, Vector3f v3, Vector3f v4, @Nonnull TextureAtlasSprite sprite, boolean reversed) {
 		int u = sprite.getWidth();
 		int v = sprite.getHeight();
 		
 		return createQuad(v1, v2, v3, v4, 0, 0, u, v, sprite, reversed);
 	}
 	
-	protected BakedQuad createQuad(Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, float uFrom, float vFrom, float uTo, float vTo, TextureAtlasSprite sprite) {
+	protected BakedQuad createQuad(Vector3f v1, Vector3f v2, Vector3f v3, Vector3f v4, float uFrom, float vFrom, float uTo, float vTo, TextureAtlasSprite sprite) {
 		return createQuad(v1, v2, v3, v4, uFrom, vFrom, uTo, vTo, sprite, false);
 	}
 	
-	protected BakedQuad createQuad(Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, float uFrom, float uTo, float vFrom, float vTo, TextureAtlasSprite sprite, boolean reversed) {
-		Vector3d normal = reversed ?
-				v3.subtract(v1).cross(v2.subtract(v1)).normalize() :
-				v3.subtract(v2).cross(v1.subtract(v2)).normalize();
+	protected BakedQuad createQuad(Vector3f v1, Vector3f v2, Vector3f v3, Vector3f v4, float uFrom, float uTo, float vFrom, float vTo, TextureAtlasSprite sprite, boolean reversed) {
+		Vector3f normal = reversed ?
+				VectorUtils.cross(VectorUtils.subtract(v3, v1), VectorUtils.subtract(v2, v1)) :
+				VectorUtils.cross(VectorUtils.subtract(v3, v2), VectorUtils.subtract(v1, v2));
 		
 		if (reversed) {
-			Vector3d v0;
+			Vector3f v0;
 			v0 = v1;
 			v1 = v4;
 			v4 = v0;
@@ -99,11 +96,11 @@ public abstract class BaseBakedModel implements IDynamicBakedModel {
 		}
 		
 		BakedQuadBuilder builder = new BakedQuadBuilder(sprite);
-		builder.setQuadOrientation(Direction.getNearest(normal.x, normal.y, normal.z));
-		putVertex(builder, normal, v1.x, v1.y, v1.z, reversed ? uTo : uFrom, vFrom, sprite);
-		putVertex(builder, normal, v2.x, v2.y, v2.z, reversed ? uTo : uFrom, vTo, sprite);
-		putVertex(builder, normal, v3.x, v3.y, v3.z, reversed ? uFrom : uTo, vTo, sprite);
-		putVertex(builder, normal, v4.x, v4.y, v4.z, reversed ? uFrom : uTo, vFrom, sprite);
+		builder.setQuadOrientation(Direction.getNearest(normal.x(), normal.y(), normal.z()));
+		putVertex(builder, normal, v1.x(), v1.y(), v1.z(), reversed ? uTo : uFrom, vFrom, sprite);
+		putVertex(builder, normal, v2.x(), v2.y(), v2.z(), reversed ? uTo : uFrom, vTo, sprite);
+		putVertex(builder, normal, v3.x(), v3.y(), v3.z(), reversed ? uFrom : uTo, vTo, sprite);
+		putVertex(builder, normal, v4.x(), v4.y(), v4.z(), reversed ? uFrom : uTo, vFrom, sprite);
 		
 		return builder.build();
 	}
@@ -111,104 +108,72 @@ public abstract class BaseBakedModel implements IDynamicBakedModel {
 	/**
 	 * creates quads for a full cube
 	 *
-	 * @param from
-	 * 		first corner
-	 * @param to
-	 * 		second corner
-	 * @param allFaces
-	 * 		texture for all faces
-	 * @param dynamicUV
-	 * 		if true the uv is calculated from the position of the cube, otherwise the complete texture is always rendered
-	 *
+	 * @param from      first corner
+	 * @param to        second corner
+	 * @param allFaces  texture for all faces
+	 * @param dynamicUV if true the uv is calculated from the position of the cube, otherwise the complete texture is always rendered
 	 * @return List of the quads of this cube
 	 */
-	protected List<BakedQuad> createCube(Vector3d from, Vector3d to, TextureAtlasSprite allFaces, boolean dynamicUV) {
+	protected List<BakedQuad> createCube(Vector3f from, Vector3f to, TextureAtlasSprite allFaces, boolean dynamicUV) {
 		return createCube(from, to, allFaces, dynamicUV, false);
 	}
 	
 	/**
 	 * creates quads for a full cube
 	 *
-	 * @param from
-	 * 		first corner
-	 * @param to
-	 * 		second corner
-	 * @param allFaces
-	 * 		texture for all faces
-	 * @param dynamicUV
-	 * 		if true the uv is calculated from the position of the cube, otherwise the complete texture is always rendered
-	 * @param withReversed
-	 * 		whether the sides also should be rendered from the inside of the cube
-	 *
+	 * @param from         first corner
+	 * @param to           second corner
+	 * @param allFaces     texture for all faces
+	 * @param dynamicUV    if true the uv is calculated from the position of the cube, otherwise the complete texture is always rendered
+	 * @param withReversed whether the sides also should be rendered from the inside of the cube
 	 * @return List of the quads of this cube
 	 */
-	protected List<BakedQuad> createCube(Vector3d from, Vector3d to, TextureAtlasSprite allFaces, boolean dynamicUV, boolean withReversed) {
+	protected List<BakedQuad> createCube(Vector3f from, Vector3f to, TextureAtlasSprite allFaces, boolean dynamicUV, boolean withReversed) {
 		return createCube(from, to, allFaces, allFaces, allFaces, allFaces, allFaces, allFaces, dynamicUV, withReversed);
 	}
 	
 	/**
 	 * creates quads for a full cube
 	 *
-	 * @param from
-	 * 		first corner
-	 * @param to
-	 * 		second corner
-	 * @param up
-	 * 		texture for the upper side of the cube
-	 * @param down
-	 * 		texture for the upper side of the cube
-	 * @param north
-	 * 		texture for the upper side of the cube
-	 * @param south
-	 * 		texture for the upper side of the cube
-	 * @param east
-	 * 		texture for the upper side of the cube
-	 * @param west
-	 * 		texture for the upper side of the cube
-	 * @param dynamicUV
-	 * 		if true the uv is calculated from the position of the cube, otherwise the complete texture is always rendered
-	 *
+	 * @param from      first corner
+	 * @param to        second corner
+	 * @param up        texture for the upper side of the cube
+	 * @param down      texture for the upper side of the cube
+	 * @param north     texture for the upper side of the cube
+	 * @param south     texture for the upper side of the cube
+	 * @param east      texture for the upper side of the cube
+	 * @param west      texture for the upper side of the cube
+	 * @param dynamicUV if true the uv is calculated from the position of the cube, otherwise the complete texture is always rendered
 	 * @return List of the quads of this cube
 	 */
-	protected List<BakedQuad> createCube(Vector3d from, Vector3d to, TextureAtlasSprite up, TextureAtlasSprite down, TextureAtlasSprite north, TextureAtlasSprite south, TextureAtlasSprite east, TextureAtlasSprite west, boolean dynamicUV) {
+	protected List<BakedQuad> createCube(Vector3f from, Vector3f to, TextureAtlasSprite up, TextureAtlasSprite down, TextureAtlasSprite north, TextureAtlasSprite south, TextureAtlasSprite east, TextureAtlasSprite west, boolean dynamicUV) {
 		return createCube(from, to, up, down, north, south, east, west, dynamicUV, false);
 	}
 	
 	/**
 	 * creates quads for a full cube
 	 *
-	 * @param from
-	 * 		first corner
-	 * @param to
-	 * 		second corner
-	 * @param up
-	 * 		texture for the upper side of the cube
-	 * @param down
-	 * 		texture for the upper side of the cube
-	 * @param north
-	 * 		texture for the upper side of the cube
-	 * @param south
-	 * 		texture for the upper side of the cube
-	 * @param east
-	 * 		texture for the upper side of the cube
-	 * @param west
-	 * 		texture for the upper side of the cube
-	 * @param dynamicUV
-	 * 		if true the uv is calculated from the position of the cube, otherwise the complete texture is always rendered
-	 * @param withReversed
-	 * 		whether the sides also should be rendered from the inside of the cube
-	 *
+	 * @param from         first corner
+	 * @param to           second corner
+	 * @param up           texture for the upper side of the cube
+	 * @param down         texture for the upper side of the cube
+	 * @param north        texture for the upper side of the cube
+	 * @param south        texture for the upper side of the cube
+	 * @param east         texture for the upper side of the cube
+	 * @param west         texture for the upper side of the cube
+	 * @param dynamicUV    if true the uv is calculated from the position of the cube, otherwise the complete texture is always rendered
+	 * @param withReversed whether the sides also should be rendered from the inside of the cube
 	 * @return List of the quads of this cube
 	 */
-	protected List<BakedQuad> createCube(@Nonnull Vector3d from, @Nonnull Vector3d to, TextureAtlasSprite up, TextureAtlasSprite down, TextureAtlasSprite north, TextureAtlasSprite south, TextureAtlasSprite east, TextureAtlasSprite west, boolean dynamicUV, boolean withReversed) {
+	protected List<BakedQuad> createCube(@Nonnull Vector3f from, @Nonnull Vector3f to, TextureAtlasSprite up, TextureAtlasSprite down, TextureAtlasSprite north, TextureAtlasSprite south, TextureAtlasSprite east, TextureAtlasSprite west, boolean dynamicUV, boolean withReversed) {
 		List<BakedQuad> quads = new ArrayList<>();
 		
-		double fx = from.x();
-		double fy = from.y();
-		double fz = from.z();
-		double tx = to.x();
-		double ty = to.y();
-		double tz = to.z();
+		float fx = from.x();
+		float fy = from.y();
+		float fz = from.z();
+		float tx = to.x();
+		float ty = to.y();
+		float tz = to.z();
 		
 		quads.add(createQuad(v(fx, ty, fz), v(fx, ty, tz), v(tx, ty, tz), v(tx, ty, fz), getUFrom(dynamicUV, fx), getUTo(dynamicUV, tx), getVFrom(dynamicUV, fz), getVTo(dynamicUV, tz), up));
 		quads.add(createQuad(v(tx, fy, fz), v(tx, fy, tz), v(fx, fy, tz), v(fx, fy, fz), getUFrom(dynamicUV, 1f - tx), getUTo(dynamicUV, 1f - fx), getVFrom(dynamicUV, fz), getVTo(dynamicUV, tz), down));
@@ -268,8 +233,8 @@ public abstract class BaseBakedModel implements IDynamicBakedModel {
 	
 	@Nonnull
 	@Override
-	public ItemOverrideList getOverrides() {
-		return ItemOverrideList.EMPTY;
+	public ItemOverrides getOverrides() {
+		return ItemOverrides.EMPTY;
 	}
 	
 }
