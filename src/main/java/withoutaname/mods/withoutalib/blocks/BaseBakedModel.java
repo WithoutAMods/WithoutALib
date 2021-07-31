@@ -1,9 +1,5 @@
 package withoutaname.mods.withoutalib.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.annotation.Nonnull;
-
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
 import com.mojang.math.Vector3f;
@@ -15,11 +11,13 @@ import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 import withoutaname.mods.withoutalib.tools.VectorUtils;
 
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class BaseBakedModel implements IDynamicBakedModel {
 	
 	/**
-	 * just as short form of "new Vector3f(x, y, z)"
-	 *
 	 * @return new Vector3f(x, y, z)
 	 */
 	protected static Vector3f v(float x, float y, float z) {
@@ -137,12 +135,12 @@ public abstract class BaseBakedModel implements IDynamicBakedModel {
 	 *
 	 * @param from      first corner
 	 * @param to        second corner
-	 * @param up        texture for the upper side of the cube
-	 * @param down      texture for the upper side of the cube
-	 * @param north     texture for the upper side of the cube
-	 * @param south     texture for the upper side of the cube
-	 * @param east      texture for the upper side of the cube
-	 * @param west      texture for the upper side of the cube
+	 * @param up        texture for the top of the cube
+	 * @param down      texture for the bottom of the cube
+	 * @param north     texture for the north side of the cube
+	 * @param south     texture for the south side of the cube
+	 * @param east      texture for the east side of the cube
+	 * @param west      texture for the west side of the cube
 	 * @param dynamicUV if true the uv is calculated from the position of the cube, otherwise the complete texture is always rendered
 	 * @return List of the quads of this cube
 	 */
@@ -155,12 +153,12 @@ public abstract class BaseBakedModel implements IDynamicBakedModel {
 	 *
 	 * @param from         first corner
 	 * @param to           second corner
-	 * @param up           texture for the upper side of the cube
-	 * @param down         texture for the upper side of the cube
-	 * @param north        texture for the upper side of the cube
-	 * @param south        texture for the upper side of the cube
-	 * @param east         texture for the upper side of the cube
-	 * @param west         texture for the upper side of the cube
+	 * @param up        texture for the top of the cube
+	 * @param down      texture for the bottom of the cube
+	 * @param north     texture for the north side of the cube
+	 * @param south     texture for the south side of the cube
+	 * @param east      texture for the east side of the cube
+	 * @param west      texture for the west side of the cube
 	 * @param dynamicUV    if true the uv is calculated from the position of the cube, otherwise the complete texture is always rendered
 	 * @param withReversed whether the sides also should be rendered from the inside of the cube
 	 * @return List of the quads of this cube
