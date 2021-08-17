@@ -41,10 +41,11 @@ public class Slider extends AbstractSliderButton {
 	@Override
 	protected void updateMessage() {
 		if (prefix != null || suffix != null) {
-			MutableComponent message = new TextComponent(String.valueOf(getValue()));
+			MutableComponent message = new TextComponent("");
 			if (prefix != null) {
-				message = prefix.append(message);
+				message.append(prefix);
 			}
+			message.append(String.valueOf(getValue()));
 			if (suffix != null) {
 				message.append(suffix);
 			}
@@ -68,5 +69,7 @@ public class Slider extends AbstractSliderButton {
 			value = min;
 		}
 		this.value = (value - min) / (double) (max - min);
+		applyValue();
+		updateMessage();
 	}
 }
