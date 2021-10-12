@@ -269,5 +269,21 @@ publishing {
         mavenLocal {
             url "file:///${rootDir}/mcmodsrepo"
         }
+        if (project.hasProperty("mavenAlias") && project.hasProperty("mavenToken")) {
+            maven {
+                if (project.version.endsWith('-SNAPSHOT')) {
+                    url "https://withoutaname.eu/maven/snapshots"
+                } else {
+                    url "https://withoutaname.eu/maven/releases"
+                }
+                credentials {
+                    username = mavenAlias
+                    password = mavenToken
+                }
+                authentication {
+                    basic(BasicAuthentication)
+                }
+            }
+        }
     }
 }
